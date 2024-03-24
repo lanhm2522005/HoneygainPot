@@ -1,7 +1,9 @@
 name: Daily claim
 on:
   schedule:
-    - cron: '0 14 * * *' # <- Use UTC Time +0 , change your time here ( 14 is hour , 0 is minutes ) and use 24-hour format
+    - cron: '0 2 * * *' # Đặt lịch chạy vào lúc 9 giờ sáng UTC+7 (2 giờ sáng UTC±0)
+    - cron: '0 14 * * *' # Đặt lịch chạy vào lúc 9 giờ tối UTC+7 (2 giờ chiều UTC±0)
+
 
 jobs:
   Daily:

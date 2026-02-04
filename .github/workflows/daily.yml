@@ -1,6 +1,7 @@
 name: Daily claim
 on:
   schedule:
+    - cron: '30 7 * * *' # Chạy lúc 14:30 UTC+7 (07:30 UTC)
     - cron: '0 2 * * *' # Đặt lịch chạy vào lúc 9 giờ sáng UTC+7 (2 giờ sáng UTC±0)
     - cron: '0 10 * * *' # Đặt lịch chạy vào lúc 5 giờ chiều UTC+7 (2 giờ sáng UTC±0)
     - cron: '0 14 * * *' # Đặt lịch chạy vào lúc 9 giờ tối UTC+7 (2 giờ chiều UTC±0)

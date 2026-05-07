@@ -1,54 +1,53 @@
 name: Daily claim
 
 on:
-schedule:
-- cron: '30 7 * * *'   # 14:30 VN
-- cron: '0 2 * * *'    # 09:00 VN
-- cron: '0 10 * * *'   # 17:00 VN
-- cron: '0 14 * * *'   # 21:00 VN
-- cron: '39 16 * * *'  # 23:39 VN (mới thêm)
+  schedule:
+    - cron: '30 7 * * *'   # 14:30 VN
+    - cron: '0 2 * * *'    # 09:00 VN
+    - cron: '0 10 * * *'   # 17:00 VN
+    - cron: '0 14 * * *'   # 21:00 VN
+    - cron: '39 16 * * *'  # 23:39 VN (mới thêm)
 
 jobs:
-Daily:
-runs-on: ubuntu-latest
+  Daily:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  - name: Check for IsJWT Secret
-    id: IsJWT
-    run: |
-      if [ "${{ secrets.IsJWT }}" != '' ]; then
-        echo "available=true" >> $GITHUB_OUTPUT;
-      else
-        echo "available=false" >> $GITHUB_OUTPUT;
-      fi
+      - name: Check for IsJWT Secret
+        id: IsJWT
+        run: |
+          if [ "${{ secrets.IsJWT }}" != '' ]; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+          fi
 
-  - name: Set IsJWT Value
-    if: ${{ steps.IsJWT.outputs.available == 'true' }}
-    id: IsJWTValue
-    run: |
-      if [ "${{ secrets.IsJWT }}" == 'false' ]; then
-        echo "value=0" >> $GITHUB_OUTPUT;
-      else
-        echo "value=1" >> $GITHUB_OUTPUT;
-      fi
+      - name: Set IsJWT Value
+        if: ${{ steps.IsJWT.outputs.available == 'true' }}
+        id: IsJWTValue
+        run: |
+          if [ "${{ secrets.IsJWT }}" == 'false' ]; then
+            echo "value=0" >> $GITHUB_OUTPUT
+          else
+            echo "value=1" >> $GITHUB_OUTPUT
+          fi
 
-  - name: Run HoneygainPot (NEW)
-    if: ${{ steps.IsJWT.outputs.available == 'true' }}
-    run: python main.py
-    env:
-      MAIL: ${{ secrets.MAIL }}
-      PASS: ${{ secrets.PASS }}
-      JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
-      IsJWT: ${{ steps.IsJWTValue.outputs.value }}
+      - name: Run HoneygainPot (NEW)
+        if: ${{ steps.IsJWT.outputs.available == 'true' }}
+        run: python main.py
+        env:
+          MAIL: ${{ secrets.MAIL }}
+          PASS: ${{ secrets.PASS }}
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+          IsJWT: ${{ steps.IsJWTValue.outputs.value }}
 
-  - name: Run HoneygainPot (OLD)
-    if: ${{ steps.IsJWT.outputs.available != 'true' }}
-    run: python main.py
-    env:
-      MAIL: ${{ secrets.MAIL }}
-      PASS: ${{ secrets.PASS }}
-      JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
-      IsJWT: 1
+      - name: Run HoneygainPot (OLD)
+        if: ${{ steps.IsJWT.outputs.available != 'true' }}
+        run: python main.py
+        env:
+          MAIL: ${{ secrets.MAIL }}
+          PASS: ${{ secrets.PASS }}
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+          IsJWT: 1
